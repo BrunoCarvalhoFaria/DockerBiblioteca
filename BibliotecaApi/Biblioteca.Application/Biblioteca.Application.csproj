@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DTO\CaixaDTO.cs" />
+    <Compile Remove="DTO\FaltaDTO.cs" />
+    <Compile Remove="DTO\VendedorDTO.cs" />
+    <Compile Remove="Interfaces\ICaixaService.cs" />
+    <Compile Remove="Interfaces\IFaltaService.cs" />
+    <Compile Remove="Interfaces\IVendedorService.cs" />
+    <Compile Remove="Services\CaixaService.cs" />
+    <Compile Remove="Services\FaltaService.cs" />
+    <Compile Remove="Services\VendedorService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="FluentResults" Version="3.15.2" />
+    <PackageReference Include="JWT" Version="10.1.0" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Biblioteca.Domain.Core\Biblioteca.Domain.Core.csproj" />
+    <ProjectReference Include="..\Biblioteca.Infra.Data\Biblioteca.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>

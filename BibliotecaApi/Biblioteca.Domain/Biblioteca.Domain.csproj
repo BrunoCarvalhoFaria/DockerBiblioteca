@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\Caixas\**" />
+    <Compile Remove="Entities\Faltas\**" />
+    <Compile Remove="Entities\Fornecedores\**" />
+    <Compile Remove="Entities\Vendedores\**" />
+    <EmbeddedResource Remove="Entities\Caixas\**" />
+    <EmbeddedResource Remove="Entities\Faltas\**" />
+    <EmbeddedResource Remove="Entities\Fornecedores\**" />
+    <EmbeddedResource Remove="Entities\Vendedores\**" />
+    <None Remove="Entities\Caixas\**" />
+    <None Remove="Entities\Faltas\**" />
+    <None Remove="Entities\Fornecedores\**" />
+    <None Remove="Entities\Vendedores\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Interfaces\ICaixaRepository.cs" />
+    <Compile Remove="Interfaces\IFaltaRepository.cs" />
+    <Compile Remove="Interfaces\IFornecedorRepository.cs" />
+    <Compile Remove="Interfaces\IVendedorRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ServiceStack.Text" Version="6.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Biblioteca.Domain.Core\Biblioteca.Domain.Core.csproj" />
+  </ItemGroup>
+
+</Project>

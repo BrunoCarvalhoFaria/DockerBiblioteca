@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\Biblioteca.Application\Biblioteca.Application.csproj" />
+	  <ProjectReference Include="..\Biblioteca.Infra.Data\Biblioteca.Infra.Data.csproj" />
+	  <ProjectReference Include="..\Biblioteca.Domain\Biblioteca.Domain.csproj" />
+	  <ProjectReference Include="..\Biblioteca.Infra.CrossCutting.Identity\Biblioteca.Infra.CrossCutting.Identity.csproj" />
+  </ItemGroup>
+
+</Project>
