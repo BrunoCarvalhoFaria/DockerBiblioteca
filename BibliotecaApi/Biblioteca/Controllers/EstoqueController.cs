@@ -13,19 +13,11 @@ namespace Biblioteca.Api.Controllers
     [ApiController]
     public class EstoqueController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEstoqueService _estoqueService;
-        private readonly IMapper _mapper;
-        public EstoqueController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IMapper mapper,
+        public EstoqueController(
             IEstoqueService estoqueService)
         {
-            _userManager = userManager;
             _estoqueService = estoqueService;
-            _signInManager = signInManager;
-            _mapper = mapper;
         }
 
         [HttpPut]
@@ -37,7 +29,7 @@ namespace Biblioteca.Api.Controllers
                 if (livroId == 0 || qtdInserida == 0)
                     throw new Exception("Todos parâmetros devem ser preenchidos");
                 _estoqueService.AlterarEstoque(livroId, qtdInserida);
-                return Ok("Quantidade alterada com sucesso!");
+                return Ok(new { Sucesso = true, Conteudo = "Quantidade alterada com sucesso!" });
             }
             catch (Exception ex)
             {
@@ -51,7 +43,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_estoqueService.ListarEstoque(obterEstoqueViewModel.LivroIds));
+                return Ok(new { Sucesso = true, Conteudo = _estoqueService.ListarEstoque(obterEstoqueViewModel.LivroIds) });
             }
             catch (Exception ex)
             {

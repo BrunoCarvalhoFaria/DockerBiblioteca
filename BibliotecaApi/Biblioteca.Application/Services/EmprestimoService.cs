@@ -42,79 +42,56 @@ namespace Biblioteca.Application.Services
 
         public async Task<long> RealizarEmprestimo(long clienteId, long livroId)
         {
-            try
-            {
-                var cliente = _clienteService.ClienteGetAById(clienteId);
-                if (cliente == null)
-                    throw new Exception("Cliente não encontrado.");
-                var livro = _livroService.LivroGetAById(livroId);
-                if (livro == null)
-                    throw new Exception("Livro não encontrado.");
+            var cliente = _clienteService.ClienteGetAById(clienteId);
+            if (cliente == null)
+                throw new Exception("Cliente não encontrado.");
+            var livro = _livroService.LivroGetAById(livroId);
+            if (livro == null)
+                throw new Exception("Livro não encontrado.");
 
-                _estoqueService.AlterarEstoque(livroId, -1);
-                Emprestimo emprestimo = new Emprestimo
-                {
-                    ClienteId = clienteId,
-                    DataEmprestimo = DateTimeOffset.Now,
-                    LivroId = livroId
-                };
-                await _emprestimoRepository.Add(emprestimo);
-                _rabbitMensagemService.EnviarMensagem(new RabbitMensagemDTO
-                {
-                    Id = emprestimo.Id,
-                    LivroId = emprestimo.LivroId,
-                    LivroNome = _livroService.LivroGetAById(emprestimo.LivroId).Titulo,
-                    ClienteId = emprestimo.ClienteId,
-                    ClienteNome = _clienteService.ClienteGetAById(emprestimo.ClienteId).Nome,
-                    Operacao = "emprestimo"
-                });
-                return emprestimo.Id;
-            }
-            catch (Exception)
+            _estoqueService.AlterarEstoque(livroId, -1);
+            Emprestimo emprestimo = new Emprestimo
             {
-                throw;
-            }
+                ClienteId = clienteId,
+                DataEmprestimo = DateTimeOffset.Now,
+                LivroId = livroId
+            };
+            await _emprestimoRepository.Add(emprestimo);
+            _rabbitMensagemService.EnviarMensagem(new RabbitMensagemDTO
+            {
+                Id = emprestimo.Id,
+                LivroId = emprestimo.LivroId,
+                LivroNome = _livroService.LivroGetAById(emprestimo.LivroId).Titulo,
+                ClienteId = emprestimo.ClienteId,
+                ClienteNome = _clienteService.ClienteGetAById(emprestimo.ClienteId).Nome,
+                Operacao = "emprestimo"
+            });
+            return emprestimo.Id;
         }
 
         public long RealizarDevolucao(long emprestimoId)
         {
-            try
+            var emprestimo = _emprestimoRepository.GetById(emprestimoId);
+            if (emprestimo == null)
+                throw new Exception("Emprestimo não encontrado.");
+            _estoqueService.AlterarEstoque(emprestimo.LivroId, 1);
+            emprestimo.DataDevolucao = DateTimeOffset.Now;
+            _emprestimoRepository.Update(emprestimo);
+            _rabbitMensagemService.EnviarMensagem(new RabbitMensagemDTO
             {
-                var emprestimo = _emprestimoRepository.GetById(emprestimoId);
-                if (emprestimo == null)
-                    throw new Exception("Emprestimo não encontrado.");
-                _estoqueService.AlterarEstoque(emprestimo.LivroId, 1);
-                emprestimo.DataDevolucao = DateTimeOffset.Now;
-                _emprestimoRepository.Update(emprestimo);
-                _rabbitMensagemService.EnviarMensagem(new RabbitMensagemDTO
-                {
-                    Id = emprestimo.Id,
-                    LivroId = emprestimo.LivroId,
-                    LivroNome = _livroService.LivroGetAById(emprestimo.LivroId).Titulo,
-                    ClienteId = emprestimo.ClienteId,
-                    ClienteNome = _clienteService.ClienteGetAById(emprestimo.ClienteId).Nome,
-                    Operacao = "devolucao"
-                });
-                return emprestimo.Id;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                Id = emprestimo.Id,
+                LivroId = emprestimo.LivroId,
+                LivroNome = _livroService.LivroGetAById(emprestimo.LivroId).Titulo,
+                ClienteId = emprestimo.ClienteId,
+                ClienteNome = _clienteService.ClienteGetAById(emprestimo.ClienteId).Nome,
+                Operacao = "devolucao"
+            });
+            return emprestimo.Id;
         }
 
         public List<EstoqueConsultaDTO> ObterEmprestimos(long? clienteId, bool apenasPendentesDevolucao, DateTimeOffset? dataInicial, DateTimeOffset? dataFinal)
         {
-            try
-            {
-
-                return _emprestimoRepository.ObterEmprestimos(clienteId, apenasPendentesDevolucao, dataInicial, dataFinal);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return _emprestimoRepository.ObterEmprestimos(clienteId, apenasPendentesDevolucao, dataInicial, dataFinal);
         }
     }
 }

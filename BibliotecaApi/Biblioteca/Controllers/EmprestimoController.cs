@@ -12,19 +12,11 @@ namespace Biblioteca.Api.Controllers
     [ApiController]
     public class EmprestimoController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmprestimoService _emprestimoService;
-        private readonly IMapper _mapper;
-        public EmprestimoController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IMapper mapper,
+        public EmprestimoController(
             IEmprestimoService emprestimoService)
         {
-            _userManager = userManager;
             _emprestimoService = emprestimoService;
-            _signInManager = signInManager;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -33,7 +25,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(await _emprestimoService.RealizarEmprestimo(clienteId, livroId));
+                return Ok(new { Sucesso = true, Conteudo = await _emprestimoService.RealizarEmprestimo(clienteId, livroId) });
             }
             catch (Exception ex)
             {
@@ -47,7 +39,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_emprestimoService.RealizarDevolucao(emprestimoId));
+                return Ok(new { Sucesso = true, Conteudo = _emprestimoService.RealizarDevolucao(emprestimoId) });
             }
             catch (Exception ex)
             {
@@ -62,7 +54,7 @@ namespace Biblioteca.Api.Controllers
             try
             {
                 bool apenasSemDevolucao = filtros.ApenasPendentesDevolucao ?? false;
-                return Ok(_emprestimoService.ObterEmprestimos(filtros.ClienteId, apenasSemDevolucao, filtros.DataInicial, filtros.DataFinal));
+                return Ok(new { Sucesso = true, Conteudo = _emprestimoService.ObterEmprestimos(filtros.ClienteId, apenasSemDevolucao, filtros.DataInicial, filtros.DataFinal) });
             }
             catch (Exception ex)
             {

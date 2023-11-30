@@ -28,65 +28,34 @@ namespace Biblioteca.Application.Services
         }
         public long CalcularEstoque(Estoque estoque, long qtd)
         {
-            try
-            {
-                estoque.Qtd += qtd;
-                if (estoque.Qtd < 0)
-                    throw new Exception("Estoque negativo não permitido");
-                return estoque.Qtd;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            estoque.Qtd += qtd;
+            if (estoque.Qtd < 0)
+                throw new Exception("Estoque negativo não permitido");
+            return estoque.Qtd;
 
         }
         public Estoque AlterarEstoque(long livroId, long qtd)
         {
-            try
-            {
-                Estoque? estoque = _estoqueRepository.BuscarPorLivroId(livroId);
-                if (estoque == null)
-                    throw new Exception("Estoque referente ao livro não encontrado.");
-                estoque.Qtd = CalcularEstoque(estoque, qtd);
-                _estoqueRepository.Update(estoque);
-                return estoque;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            Estoque? estoque = _estoqueRepository.BuscarPorLivroId(livroId);
+            if (estoque == null)
+                throw new Exception("Estoque referente ao livro não encontrado.");
+            estoque.Qtd = CalcularEstoque(estoque, qtd);
+            _estoqueRepository.Update(estoque);
+            return estoque;
         }
         public async Task<long> PostEstoque(EstoqueDTO dto)
         {
-            try
-            {
-                    if (_livroService.LivroGetAById(dto.LivroId) == null)
-                        throw new Exception("Livro não encontrado.");
-                    Estoque estoque = _mapper.Map<Estoque>(dto);
-                    await _estoqueRepository.Add(estoque);
-                    return estoque.Id;
-                
-            }
-            catch (Exception)
-            {
+            if (_livroService.LivroGetAById(dto.LivroId) == null)
+                throw new Exception("Livro não encontrado.");
+            Estoque estoque = _mapper.Map<Estoque>(dto);
+            await _estoqueRepository.Add(estoque);
+            return estoque.Id;
 
-                throw;
-            }
         }
-        public List<RetornoEstoqueDTO> ListarEstoque(List<long> livroIdList) {
-            try
-            {
-                List<RetornoEstoqueDTO> retorno = _estoqueRepository.ListarEstoque(livroIdList);
-                return retorno;
-            }
-            catch (Exception )
-            {
-
-                throw;
-            }
-        
-        
+        public List<RetornoEstoqueDTO> ListarEstoque(List<long> livroIdList)
+        {
+            List<RetornoEstoqueDTO> retorno = _estoqueRepository.ListarEstoque(livroIdList);
+            return retorno;
         }
     }
 }

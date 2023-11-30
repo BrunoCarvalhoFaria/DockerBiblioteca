@@ -117,15 +117,8 @@ namespace DrPay.Infra.Data.Repository
             {
                 data.SaveChanges();
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
-                var sb = new StringBuilder();
-                sb.AppendLine($"Erro: detalhe técnico::: {e?.InnerException?.InnerException?.Message}");
-
-                foreach (var eve in e.Entries)
-                {
-                    sb.AppendLine($"Objeto [{eve.Entity.GetType().Name}] no estado [{eve.State}] não pode ser atualizado.");
-                }
                 throw;
             }
         }

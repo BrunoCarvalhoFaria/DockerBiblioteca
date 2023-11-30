@@ -14,18 +14,13 @@ namespace Biblioteca.Api.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IClienteService _clienteService;
         private readonly IMapper _mapper;
-        public ClienteController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+        public ClienteController(
             IMapper mapper,
             IClienteService clienteService)
         {
-            _userManager = userManager;
             _clienteService = clienteService;
-            _signInManager = signInManager;
             _mapper = mapper;
         }
 
@@ -36,12 +31,12 @@ namespace Biblioteca.Api.Controllers
             try
             {
                 long id = await _clienteService.ClientePost(_mapper.Map<ClienteDTO>(dto));
-                return Ok(id);
+                return Ok(new { Sucesso = true, Conteudo = id });
             }
-            catch (Exception)
+            catch (Exception ex )
             {
 
-                return BadRequest("Cliente não cadastrado");
+                return BadRequest(ex.Message);
             }
         }
         [HttpGet]
@@ -50,7 +45,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_clienteService.ObterTodos());
+                return Ok(new { Sucesso = true, Conteudo = _clienteService.ObterTodos() });
             }
             catch (Exception ex)
             {
@@ -64,7 +59,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_clienteService.ClienteGetAById(id));
+                return Ok(new { Sucesso = true, Conteudo = _clienteService.ClienteGetAById(id) });
             }
             catch (Exception ex)
             {
@@ -78,7 +73,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_clienteService.ClienteDelete(id));
+                return Ok(new { Sucesso = true, Conteudo = _clienteService.ClienteDelete(id) });
             }
             catch (Exception ex)
             {
@@ -91,7 +86,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_clienteService.ClientePut(_mapper.Map<ClienteDTO>(dto)));
+                return Ok(new { Sucesso = true, Conteudo = _clienteService.ClientePut(_mapper.Map<ClienteDTO>(dto)) });
             }
             catch (Exception ex)
             {

@@ -15,20 +15,15 @@ namespace Biblioteca.Api.Controllers
     [ApiController]
     public class LivroController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILivroService _livroService;
         private readonly IMapper _mapper;
         private readonly IEstoqueService _estoqueService;
-        public LivroController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+        public LivroController(
             IMapper mapper,
             ILivroService livroService,
             IEstoqueService estoqueService)
         {
-            _userManager = userManager;
             _livroService = livroService;
-            _signInManager = signInManager;
             _mapper = mapper;
             _estoqueService = estoqueService;
         }
@@ -42,7 +37,7 @@ namespace Biblioteca.Api.Controllers
                 var livroId = await _livroService.LivroPost(_mapper.Map<LivroPostDTO>(livro));
                 EstoqueDTO estoque = new EstoqueDTO { LivroId = livroId, Qtd = 0};
                 await _estoqueService.PostEstoque(estoque);
-                return Ok(livroId);
+                return Ok(new { Sucesso = true, Conteudo = livroId });
             }
             catch (Exception ex)
             {
@@ -58,7 +53,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroService.ObterTodos(pagina, qtdRegistros));
+                return Ok(new { Sucesso = true, Conteudo = _livroService.ObterTodos(pagina, qtdRegistros) });
             }
             catch (Exception ex)
             {
@@ -72,7 +67,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroService.ObterTodosComFiltro(viewModel.Codigo,viewModel.Titulo,viewModel.Ano,viewModel.Autor,viewModel.LivroGeneroId,viewModel.Editora,viewModel.Pagina,viewModel.QtdRegistros));
+                return Ok(new { Sucesso = true, Conteudo = _livroService.ObterTodosComFiltro(viewModel.Codigo,viewModel.Titulo,viewModel.Ano,viewModel.Autor,viewModel.LivroGeneroId,viewModel.Editora,viewModel.Pagina,viewModel.QtdRegistros)});
             }
             catch (Exception ex)
             {
@@ -85,7 +80,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroService.LivroGetAById(id));
+                return Ok(new { Sucesso = true, Conteudo = _livroService.LivroGetAById(id) });
             }
             catch (Exception ex)
             {
@@ -100,7 +95,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-               return Ok(_livroService.LivroPut(dto)); 
+               return Ok(new { Sucesso = true, Conteudo = _livroService.LivroPut(dto) }); 
             }
             catch (Exception ex)
             {
@@ -116,7 +111,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroService.LivroDelete(id));
+                return Ok(new { Sucesso = true, Conteudo = _livroService.LivroDelete(id) });
             }
             catch (Exception ex)
             {

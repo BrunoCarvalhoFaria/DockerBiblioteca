@@ -14,19 +14,11 @@ namespace Biblioteca.Api.Controllers
     [ApiController]
     public class LivroGeneroController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILivroGeneroService _livroGeneroService;
-        private readonly IMapper _mapper;
-        public LivroGeneroController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IMapper mapper,
+        public LivroGeneroController(
             ILivroGeneroService livroGeneroService)
         {
-            _userManager = userManager;
             _livroGeneroService = livroGeneroService;
-            _signInManager = signInManager;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -35,7 +27,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(await _livroGeneroService.LivroGeneroPost(descricao));
+                return Ok(new { Sucesso = true, Conteudo = await _livroGeneroService.LivroGeneroPost(descricao) });
             }
             catch (Exception ex)
             {
@@ -49,7 +41,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroGeneroService.Obtertodos());
+                return Ok(new { Sucesso = true, Conteudo = _livroGeneroService.Obtertodos() });
             }
             catch (Exception ex)
             {
@@ -62,7 +54,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroGeneroService.LivroGeneroGetAById(id));
+                return Ok(new { Sucesso = true, Conteudo = _livroGeneroService.LivroGeneroGetAById(id) });
             }
             catch (Exception ex)
             {
@@ -75,7 +67,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroGeneroService.LivroGeneroDelete(id));
+                return Ok(new { Sucesso = true, Conteudo = _livroGeneroService.LivroGeneroDelete(id) });
             }
             catch (Exception ex)
             {
@@ -89,7 +81,7 @@ namespace Biblioteca.Api.Controllers
         {
             try
             {
-                return Ok(_livroGeneroService.LivroGeneroPut(dto));
+                return Ok(new { Sucesso = true, Conteudo = _livroGeneroService.LivroGeneroPut(dto) });
             }
             catch (Exception ex)
             {
